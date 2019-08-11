@@ -24,6 +24,8 @@ namespace tutorial
         public float fl_MaxAngle = 90;
         public float fl_CameraSpeed = 24;
 
+        private Vector2 vec_NewSpeed;
+
         // Use this for initialization
         void Start()
         {
@@ -47,6 +49,7 @@ namespace tutorial
 
             float fl_DeltaX = Input.GetAxis("Horizontal");
             float fl_DeltaZ = Input.GetAxis("Vertical");
+            vec_NewSpeed = new Vector2(fl_DeltaX, fl_DeltaZ);
             float fl_DeltaT = Time.deltaTime;
 
             Vector3 vec_Side = fl_Speed * fl_DeltaX * fl_DeltaT * tr_Transform.right;
@@ -79,7 +82,8 @@ namespace tutorial
 
         private void AnimControl()
         {
-
+            anim_Animator.SetFloat("X", vec_NewSpeed.x);
+            anim_Animator.SetFloat("Y", vec_NewSpeed.y);
         }
     }
 }

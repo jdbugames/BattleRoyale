@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace tutorial
+namespace BattleRoyale
 {
     public class PlayerController : MonoBehaviour
     {
@@ -24,7 +24,11 @@ namespace tutorial
         public float fl_MaxAngle = 90;
         public float fl_CameraSpeed = 24;
 
-        private Vector2 vec_NewSpeed;
+        private Vector2 vec_MoveDelta;
+        private Vector2 vec_MouseDelta;
+        private float fl_DeltaT;
+
+        public InputController _Input;
 
         // Use this for initialization
         void Start()
@@ -39,35 +43,44 @@ namespace tutorial
         void FixedUpdate()
         {
             PlayerControl();
+            MoveController();
             CameraControl();
             AnimControl();
         }
 
+        //Collect Player Information
         private void PlayerControl()
+        {
+            _Input.Update();
+
+            float fl_DeltaX = _Input.fl_Check("Horizontal");
+            float fl_DeltaZ = _Input.fl_Check("Vertical");
+            float fl_MouseX = _Input.fl_Check("Mouse X");
+            float fl_MouseY = _Input.fl_Check("Mouse Y");
+
+            vec_MoveDelta = new Vector2(fl_DeltaX, fl_DeltaZ);
+            vec_MouseDelta = new Vector2(fl_MouseX, fl_MouseY);
+            fl_DeltaT = Time.deltaTime;
+        }
+
+        //Move the character
+        private void MoveController()
         {
             Vector3 vec_Speed = rg_Rigidbody.velocity;
 
-            float fl_DeltaX = Input.GetAxis("Horizontal");
-            float fl_DeltaZ = Input.GetAxis("Vertical");
-            vec_NewSpeed = new Vector2(fl_DeltaX, fl_DeltaZ);
-            float fl_DeltaT = Time.deltaTime;
-
-            Vector3 vec_Side = fl_Speed * fl_DeltaX * fl_DeltaT * tr_Transform.right;
-            Vector3 vec_Forward = fl_Speed * fl_DeltaZ * fl_DeltaT * tr_Transform.forward;
+            Vector3 vec_Side = fl_Speed * vec_MoveDelta.x * fl_DeltaT * tr_Transform.right;
+            Vector3 vec_Forward = fl_Speed * vec_MoveDelta.y * fl_DeltaT * tr_Transform.forward;
 
             Vector3 vec_EndSpeed = vec_Side + vec_Forward;
 
             rg_Rigidbody.velocity = vec_EndSpeed;
         }
 
+        //Move the camera
         private void CameraControl()
         {
-            float fl_MouseX = Input.GetAxis("Mouse X");
-            float fl_MouseY = Input.GetAxis("Mouse Y");
-            float fl_DeltaT = Time.deltaTime;
-
-            fl_RotY += fl_MouseY * fl_DeltaT * fl_RotationSpeed;
-            float fl_XRot = fl_MouseX * fl_DeltaT * fl_RotationSpeed;
+            fl_RotY += vec_MouseDelta.y * fl_DeltaT * fl_RotationSpeed;
+            float fl_XRot = vec_MouseDelta.x * fl_DeltaT * fl_RotationSpeed;
 
             tr_Transform.Rotate(0, fl_XRot, 0);
 
@@ -80,10 +93,11 @@ namespace tutorial
             tr_Cam.rotation = Quaternion.Lerp(tr_Cam.rotation, tr_CameraHolder.rotation, fl_CameraSpeed * fl_DeltaT);
         }
 
+        //Animate the character
         private void AnimControl()
         {
-            anim_Animator.SetFloat("X", vec_NewSpeed.x);
-            anim_Animator.SetFloat("Y", vec_NewSpeed.y);
+            anim_Animator.SetFloat("X", vec_MoveDelta.x);
+            anim_Animator.SetFloat("Y", vec_MoveDelta.y);
         }
     }
 }

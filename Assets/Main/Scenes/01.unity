@@ -370,6 +370,20 @@ MonoBehaviour:
   fl_MinAngle: -70
   fl_MaxAngle: 150
   fl_CameraSpeed: 24
+  _Input:
+    list_Keys:
+    - str_Name: Horizontal
+      _Type: 0
+      fl_Sensibility: 0
+    - str_Name: Vertical
+      _Type: 0
+      fl_Sensibility: 0
+    - str_Name: Mouse X
+      _Type: 0
+      fl_Sensibility: 0
+    - str_Name: Mouse Y
+      _Type: 0
+      fl_Sensibility: 0
 --- !u!1001 &1269036562
 Prefab:
   m_ObjectHideFlags: 0

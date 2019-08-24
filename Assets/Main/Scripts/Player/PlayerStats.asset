@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
   fl_Speed: 100
+  fl_RunningSpeedIncrement: 2
   fl_RotationSpeed: 250
   fl_JumpForce: 250
   fl_MinAngle: -70

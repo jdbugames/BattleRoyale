@@ -9,15 +9,21 @@ namespace BattleRoyale
     {
         private Transform tr_Transform;
         private Rigidbody rg_Rigidbody;
-        private Animator anim_Animator;
+        private Animator an_Animator;
         CapsuleCollider col_Collider;
+        IkHandlerController _IkHandlerController;
 
         public Transform tr_CameraShoulder;
         public Transform tr_CameraHolder;
+        public Transform tr_LookAt;
         private Transform tr_Cam;
 
         private float fl_RotY = 0f;
         private float fl_RotX = 0f;
+
+        public Transform tr_HandsPivot;
+        public Transform tr_RightHand;
+        public Transform tr_RightElbow;
 
         public CharStatsController _Stats;
 
@@ -25,9 +31,15 @@ namespace BattleRoyale
         public bool bl_Jumping = false;
         public bool bl_Crouch = false;
         public bool bl_Crouching = false;
+        public bool bl_Running = false;
+        public bool bl_Aiming = false;
+        public bool bl_Shooting = false;
+
+        public GunController _GunController;
 
         private Vector2 vec_MoveDelta;
         private Vector2 vec_MouseDelta;
+        private Vector2 vec_MoveAnim;
         private float fl_DeltaT;
 
         public InputController _Input;
@@ -38,7 +50,11 @@ namespace BattleRoyale
             tr_Transform = this.transform;
             rg_Rigidbody = this.GetComponent<Rigidbody>();
             col_Collider = GetComponent<CapsuleCollider>();
-            anim_Animator = this.GetComponentInChildren<Animator>();
+            an_Animator = this.GetComponentInChildren<Animator>();
+            _IkHandlerController = GetComponentInChildren<IkHandlerController>();
+            _IkHandlerController.tr_LookAtPosition = tr_LookAt;
+            _IkHandlerController.tr_RightHandPosition = tr_RightHand;
+            _IkHandlerController.tr_RightElbowPosition = tr_RightElbow;
             tr_Cam = Camera.main.transform;
         }
 
@@ -47,6 +63,7 @@ namespace BattleRoyale
         {
             PlayerControl();
             MoveController();
+            ItemsControl();
             CameraControl();
             AnimControl();
         }
@@ -62,6 +79,9 @@ namespace BattleRoyale
             float fl_MouseY = _Input.fl_Check("Mouse Y");
             bl_Jumping = _Input.bl_Check("Jump");
             bl_Crouching = _Input.bl_Check("Crouch");
+            bl_Running = _Input.bl_Check("Run");
+            bl_Aiming = _Input.bl_Check("Fire2") && !bl_Running;
+            bl_Shooting = _Input.bl_Check("Fire1");
 
             vec_MoveDelta = new Vector2(fl_DeltaX, fl_DeltaZ);
             vec_MouseDelta = new Vector2(fl_MouseX, fl_MouseY);
@@ -83,6 +103,13 @@ namespace BattleRoyale
                 if(bl_Crouching)
                 {
                     OnCrouch();
+                }
+                else
+                {
+                    if(bl_Running)
+                    {
+                        vec_EndSpeed *= _Stats.fl_RunningSpeedIncrement;
+                    }
                 }
 
                 if(bl_Jumping)
@@ -110,7 +137,26 @@ namespace BattleRoyale
                 }
             }
 
+            vec_MoveAnim = vec_MoveDelta * (bl_Running ? 2 : 1);
+        }
 
+        private void ItemsControl()
+        {
+            if(_GunController != null)
+            {
+                _IkHandlerController.tr_LeftHandPosition = _GunController.tr_LeftHandPosition;
+                _IkHandlerController.tr_LeftElbowPosition = _GunController.tr_LeftElbowPosition;
+
+                if(bl_Shooting)
+                {
+                    _GunController.Shoot();
+                }
+                _IkHandlerController.UpdateRecoil(_GunController.fl_MaxRecoil, -vec_MoveAnim.x, _GunController.fl_ShootingModifier);
+            }
+
+            tr_HandsPivot.position = an_Animator.GetBoneTransform(HumanBodyBones.RightShoulder).position;
+            Quaternion qt_LocalRotation = Quaternion.Euler(-fl_RotY, tr_HandsPivot.localRotation.y, tr_HandsPivot.localRotation.z);
+            tr_HandsPivot.localRotation = qt_LocalRotation;
         }
 
         public void Jump()
@@ -148,10 +194,14 @@ namespace BattleRoyale
         //Animate the character
         private void AnimControl()
         {
-            anim_Animator.SetBool("Ground", bl_OnGround);
-            anim_Animator.SetBool("Crouch", bl_Crouch);
-            anim_Animator.SetFloat("X", vec_MoveDelta.x);
-            anim_Animator.SetFloat("Y", vec_MoveDelta.y);
+            an_Animator.SetBool("Ground", bl_OnGround);
+            an_Animator.SetBool("Crouch", bl_Crouch);
+
+            an_Animator.SetFloat("X", vec_MoveAnim.x);
+            an_Animator.SetFloat("Y", vec_MoveAnim.y);
+
+            _IkHandlerController.bl_Aiming = this.bl_Aiming;
+            _IkHandlerController.bl_Shooting = this.bl_Shooting;
         }
     }
 }

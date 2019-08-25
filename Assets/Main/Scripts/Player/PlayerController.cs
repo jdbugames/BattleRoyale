@@ -81,7 +81,7 @@ namespace BattleRoyale
             bl_Crouching = _Input.bl_Check("Crouch");
             bl_Running = _Input.bl_Check("Run");
             bl_Aiming = _Input.bl_Check("Fire2") && !bl_Running;
-            bl_Shooting = _Input.bl_Check("Fire1");
+            bl_Shooting = _Input.bl_Check("Fire1") && !bl_Running;
 
             vec_MoveDelta = new Vector2(fl_DeltaX, fl_DeltaZ);
             vec_MouseDelta = new Vector2(fl_MouseX, fl_MouseY);
@@ -147,11 +147,16 @@ namespace BattleRoyale
                 _IkHandlerController.tr_LeftHandPosition = _GunController.tr_LeftHandPosition;
                 _IkHandlerController.tr_LeftElbowPosition = _GunController.tr_LeftElbowPosition;
 
+                _GunController.DrawCrossHair(tr_Cam);
+
                 if(bl_Shooting)
                 {
                     _GunController.Shoot();
                 }
+
                 _IkHandlerController.UpdateRecoil(_GunController.fl_MaxRecoil, -vec_MoveAnim.x, _GunController.fl_ShootingModifier);
+
+                Cursor.lockState = (Input.GetKey(KeyCode.Escape) ? CursorLockMode.None : CursorLockMode.Locked);
             }
 
             tr_HandsPivot.position = an_Animator.GetBoneTransform(HumanBodyBones.RightShoulder).position;

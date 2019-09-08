@@ -6,16 +6,19 @@ namespace BattleRoyale
 {
     public class BulletController : MonoBehaviour
     {
-        public float fl_Power = 100f;
-        public float fl_LifeTime = 10f;
+        private float fl_LifeTime = 10f;
+        private float fl_Damage;
         private float fl_DeltaTime = 0;
         Rigidbody rg_Bullet;
 
-        private void Start()
+
+        public void Initilize(float fl_Power, float fl_Damage, float fl_LifeTime)
         {
             rg_Bullet = GetComponent<Rigidbody>();
-
             rg_Bullet.velocity = this.transform.forward * fl_Power;
+            this.fl_Damage = fl_Damage;
+            this.fl_LifeTime = fl_LifeTime;
+
         }
 
         private void FixedUpdate()

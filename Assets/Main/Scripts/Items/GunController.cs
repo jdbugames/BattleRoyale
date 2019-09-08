@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BattleRoyale
 {
-    public class GunController : MonoBehaviour
+    public class GunController : WeaponController
     {
         private Transform tr_CrossHair;
 
@@ -12,23 +12,37 @@ namespace BattleRoyale
         public Transform tr_LeftHandPosition;
         public Transform tr_LeftElbowPosition;
 
-        public Transform tr_BulletPrefab;
-
-        public float fl_Range = 10f;
-        public float fl_MaxRecoil = 1f;
-        public float fl_ShootingModifier = 2f;
+        public BulletController bc_BulletPrefab;
 
         private bool bl_ShowCrossHair = false;
 
-        private void Start()
+        protected override void Initialize()
         {
             tr_CrossHair = GetComponentInChildren<Canvas>().transform;
             tr_CrossHair.gameObject.SetActive(false);
         }
 
-        public void Shoot()
+        public GunStatsController GetGunStats()
         {
-            Instantiate(tr_BulletPrefab, tr_ShootPoint.position, tr_ShootPoint.rotation);
+            if (Stats is GunStatsController)
+            {
+                return Stats as GunStatsController;
+            }
+            else
+            {
+                GunStatsController gsc_defect = new GunStatsController();
+                Stats = gsc_defect;
+                return gsc_defect;
+            }
+                
+        }
+
+        public override void Attack()
+        {
+            BulletController bc_Bullet = Instantiate<BulletController>(bc_BulletPrefab, tr_ShootPoint.position, tr_ShootPoint.rotation);
+            GunStatsController gsc_Stats = GetGunStats();
+            bc_Bullet.Initilize(gsc_Stats.fl_Power, gsc_Stats.fl_Damage, gsc_Stats.fl_LifeTime);
+
         }
 
         public void ShowCrossHair()
@@ -44,7 +58,7 @@ namespace BattleRoyale
             }
 
             tr_CrossHair.gameObject.SetActive(true);
-            Vector3 vec_End = tr_ShootPoint.position + tr_ShootPoint.forward * fl_Range;
+            Vector3 vec_End = tr_ShootPoint.position + tr_ShootPoint.forward * GetGunStats().fl_Range;
             tr_CrossHair.position = Vector3.Lerp(vec_End, tr_Camera.position, 0.9f);
             tr_CrossHair.rotation = tr_Camera.rotation;
         }

@@ -24,14 +24,14 @@ namespace BattleRoyale
 
         public GunStatsController GetGunStats()
         {
-            if (Stats is GunStatsController)
+            if (isc_Stats is GunStatsController)
             {
-                return Stats as GunStatsController;
+                return isc_Stats as GunStatsController;
             }
             else
             {
                 GunStatsController gsc_defect = new GunStatsController();
-                Stats = gsc_defect;
+                isc_Stats = gsc_defect;
                 return gsc_defect;
             }
                 

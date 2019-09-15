@@ -6,7 +6,7 @@ namespace BattleRoyale
 {
     public class ItemController : MonoBehaviour
     {
-        public ItemStatsController Stats;
+        public ItemStatsController isc_Stats;
         internal Transform tr_MTransform;
         private Rigidbody rg_Rigidbody;
         private SphereCollider sc_Collider;

@@ -30,11 +30,23 @@ namespace BattleRoyale
 
         public bool Bl_AddItem(ItemController Ic_Item)
         {
-            if(dic_MappedInventary.ContainsKey(Ic_Item.Stats.str_SlotType))
+            if(dic_MappedInventary.ContainsKey(Ic_Item.isc_Stats.str_SlotType))
             {
-                return dic_MappedInventary[Ic_Item.Stats.str_SlotType].AddItem(Ic_Item);
+                return dic_MappedInventary[Ic_Item.isc_Stats.str_SlotType].AddItem(Ic_Item);
             }
             return false;
+        }
+
+        public ItemController GetSelectedAd(string str_Group)
+        {
+            if(!dic_MappedInventary.ContainsKey(str_Group))
+            {
+                return null;
+            }
+            else
+            {
+                return dic_MappedInventary[str_Group].Ic_GetSelected();
+            }
         }
     }
 
@@ -57,7 +69,22 @@ namespace BattleRoyale
 
         public ItemController Ic_GetSelected()
         {
-            return lst_Items[int_SelIndex];
+            if(lst_Items.Count == 0)
+            {
+                return null;
+            }
+
+            if (int_SelectedIndex < 0)
+            {
+                return null;
+            }
+
+            if (int_SelectedIndex < lst_Items.Count)
+            {
+                return lst_Items[int_SelIndex];
+            }
+
+            return null;
         }
 
         public bool AddItem(ItemController Ic_Item)

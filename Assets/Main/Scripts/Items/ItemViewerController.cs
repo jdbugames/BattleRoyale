@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace BattleRoyale
 {
@@ -10,15 +11,18 @@ namespace BattleRoyale
         private bool bl_ShowingViewer = false;
         public Vector3 vec_ViewerOffset;
 
+        public TextMeshProUGUI txt_ItemName;
+
         private void Start()
         {
             tr_MTransform = this.transform;
         }
 
-        public void DrawItemViewer(Transform tr_ItemPost, Transform tr_Camera)
+        public void DrawItemViewer(ItemStatsController isc_Stats, Transform tr_ItemPost, Transform tr_Camera)
         {
             tr_MTransform.position = tr_ItemPost.position + vec_ViewerOffset;
             tr_MTransform.LookAt(tr_Camera);
+            txt_ItemName.text = isc_Stats.str_ItemName;
             ShowViewer();
         }
 

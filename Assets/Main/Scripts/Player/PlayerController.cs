@@ -161,7 +161,7 @@ namespace BattleRoyale
                     ItemController ic_Item = col_Nearest.GetComponent<ItemController>();
                     if (ic_Item != null)
                     {
-                        ic_Inventary.ivc_ItemViewer.DrawItemViewer(ic_Item.tr_MTransform, tr_Cam);
+                        ic_Inventary.ivc_ItemViewer.DrawItemViewer(ic_Item.isc_Stats, ic_Item.tr_MTransform, tr_Cam);
                         if (st_States.bl_Interacting)
                         {
                             ic_Inventary.Bl_AddItem(ic_Item);
@@ -173,25 +173,29 @@ namespace BattleRoyale
             {
                 ic_Inventary.ivc_ItemViewer.HideViewer();
             }
-            
 
-            //if(gc_GunController != null)
-            //{
-            //    ihc_IkHandlerController.tr_LeftHandPosition = gc_GunController.tr_LeftHandPosition;
-            //    ihc_IkHandlerController.tr_LeftElbowPosition = gc_GunController.tr_LeftElbowPosition;
+            ItemController ic_SelectedWeapon = ic_Inventary.GetSelectedAd("PrimaryWeapon");
 
-            //    gc_GunController.DrawCrossHair(tr_Cam);
+            if(ic_SelectedWeapon != null)
+            {
+                if(ic_SelectedWeapon is GunController)
+                {
+                    GunController gc_GunController = (ic_SelectedWeapon as GunController);
+                    ihc_IkHandlerController.tr_LeftHandPosition = gc_GunController.tr_LeftHandPosition;
+                    ihc_IkHandlerController.tr_LeftElbowPosition = gc_GunController.tr_LeftElbowPosition;
 
-            //    if(st_States.bl_Shooting)
-            //    {
-            //        gc_GunController.Shoot();
-            //    }
+                    gc_GunController.DrawCrossHair(tr_Cam);
 
-            //    ihc_IkHandlerController.UpdateRecoil(gc_GunController.fl_MaxRecoil, -vec_MoveAnim.x, gc_GunController.fl_ShootingModifier);
+                    if (st_States.bl_Shooting)
+                    {
+                        gc_GunController.Attack();
+                    }
 
-            //    Cursor.lockState = (Input.GetKey(KeyCode.Escape) ? CursorLockMode.None : CursorLockMode.Locked);
-            //}
+                    ihc_IkHandlerController.UpdateRecoil(gc_GunController.GetGunStats().fl_MaxRecoil, -vec_MoveAnim.x, gc_GunController.GetGunStats().fl_ShootingModifier);
 
+                    Cursor.lockState = (Input.GetKey(KeyCode.Escape) ? CursorLockMode.None : CursorLockMode.Locked);
+                }
+            }
         }
 
         public void Jump()

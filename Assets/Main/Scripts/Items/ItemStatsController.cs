@@ -9,6 +9,7 @@ namespace BattleRoyale
     {
         public string str_ItemName;
         public string str_SlotType;
+        public Sprite spr_Icon;
         public float fl_Weight;
     }
 }

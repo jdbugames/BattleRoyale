@@ -7,6 +7,7 @@ namespace BattleRoyale
     public class InventaryController : MonoBehaviour
     {
         public ItemViewerController ivc_ItemViewer;
+        public InventaryViewerController ivc_InventaryViewer;
         public List<InventaryGroup> lst_InventaryGroups;
 
         private Dictionary<string, InventaryGroup> dic_MappedInventary = new Dictionary<string, InventaryGroup>();
@@ -14,6 +15,7 @@ namespace BattleRoyale
         public void Start()
         {
             MapInventaryGroups();
+            ivc_InventaryViewer.Initialize(this);
         }
 
         private void MapInventaryGroups()
@@ -39,13 +41,26 @@ namespace BattleRoyale
 
         public ItemController GetSelectedAd(string str_Group)
         {
-            if(!dic_MappedInventary.ContainsKey(str_Group))
+            InventaryGroup ig_Group = GetGroup(str_Group);
+            if(ig_Group == null)
             {
                 return null;
             }
             else
             {
-                return dic_MappedInventary[str_Group].Ic_GetSelected();
+                return ig_Group.Ic_GetSelected();
+            }
+        }
+
+        public InventaryGroup GetGroup(string str_Group)
+        {
+            if (!dic_MappedInventary.ContainsKey(str_Group))
+            {
+                return null;
+            }
+            else
+            {
+                return dic_MappedInventary[str_Group];
             }
         }
     }

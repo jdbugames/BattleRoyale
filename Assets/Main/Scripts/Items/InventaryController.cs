@@ -73,6 +73,10 @@ namespace BattleRoyale
         public int int_MaxCapacity = 3;
         public bool bl_ReplaceSelectedOnMax = true;
 
+        public ItemEvent ie_AddedItem;
+        public ItemEvent ie_RemovedItem;
+
+
         public int int_SelIndex;
         public int int_SelectedIndex
         {
@@ -108,9 +112,20 @@ namespace BattleRoyale
             {
                 if(bl_ReplaceSelectedOnMax)
                 {
-                    Ic_GetSelected().Drop();
+                    ItemController ic_Temp = Ic_GetSelected();
+                    ic_Temp.Drop();
                     lst_Items[int_SelIndex] = Ic_Item;
                     Ic_Item.Take(tr_RealPosition);
+
+                    if(ie_RemovedItem != null)
+                    {
+                        ie_RemovedItem(ic_Temp);
+                    }
+                    if(ie_AddedItem != null)
+                    {
+                        ie_AddedItem(Ic_Item);
+                    }
+
                     return true;
                 }
                 return false;
@@ -123,4 +138,7 @@ namespace BattleRoyale
             }
         }
     }
+
+
+    public delegate void ItemEvent(ItemController ic_Item);
 }

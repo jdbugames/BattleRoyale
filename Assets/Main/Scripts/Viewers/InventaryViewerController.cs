@@ -17,7 +17,7 @@ namespace BattleRoyale
                 if(!dic_MappedViewers.ContainsKey(v.str_SlotType))
                 {
                     dic_MappedViewers.Add(v.str_SlotType, v);
-                    InventaryGroup ig_Group = ic_inventaryController.GetGroup(v.SlotType);
+                    InventaryGroup ig_Group = ic_inventaryController.GetGroup(v.str_SlotType);
 
                     if(ig_Group != null)
                     {

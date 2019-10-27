@@ -43,6 +43,35 @@ namespace BattleRoyale
                     iivc_itemViewer.SetItem(ig_ThisGroup.lst_Items[i]);
                 }
             }
+
+            ig_ThisGroup.ie_AddedItem += new ItemEvent(AddItem);
+            ig_ThisGroup.ie_RemovedItem += new ItemEvent(RemoveItem);
+        }
+
+        public void AddItem(ItemController ic_Itm)
+        {
+            foreach(InventaryItemViewerController iivc_Viewer in iivc_ItemViewers)
+            {
+                if(iivc_Viewer.ic_InvItem == null)
+                {
+                    iivc_Viewer.SetItem(ic_Itm);
+                    break;
+                }
+            }
+        }
+
+        public void RemoveItem(ItemController ic_Itm)
+        {
+            for (int i = 0; i < iivc_ItemViewers.Count; i++)
+            {
+                if(iivc_ItemViewers[i].ic_InvItem == ic_Itm)
+                {
+                    iivc_ItemViewers[i].SetItem(null);
+                    iivc_ItemViewers[i].tr_Mtransform.SetSiblingIndex(iivc_ItemViewers.Count);
+                    iivc_ItemViewers.Add(iivc_ItemViewers[i]);
+                    iivc_ItemViewers.RemoveAt(i);
+                }
+            }
         }
     }
 }

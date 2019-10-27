@@ -130,12 +130,41 @@ namespace BattleRoyale
                 }
                 return false;
             }
-            else
+
+            lst_Items.Add(Ic_Item);
+            Ic_Item.Take(tr_RealPosition);
+
+            if (ie_AddedItem != null)
             {
-                lst_Items.Add(Ic_Item);
-                Ic_Item.Take(tr_RealPosition);
+                ie_AddedItem(Ic_Item);
+            }
+            return true;
+        }
+
+        public int GetIndex(ItemController ic_Itm)
+        {
+            return lst_Items.IndexOf(ic_Itm);
+        }
+
+        public void Select(ItemController ic_Itm)
+        {
+            int int_Indx = GetIndex(ic_Itm);
+            int_SelectedIndex = int_Indx;
+        }
+
+        public bool RemoveItem(ItemController ic_Item)
+        {
+            if(lst_Items.Remove(ic_Item))
+            {
+                if (ie_RemovedItem != null)
+                {
+                    ie_RemovedItem(ic_Item);
+                }
                 return true;
             }
+            return false;
+
+            
         }
     }
 

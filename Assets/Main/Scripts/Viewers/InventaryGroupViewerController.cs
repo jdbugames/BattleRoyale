@@ -70,6 +70,7 @@ namespace BattleRoyale
                     iivc_ItemViewers[i].tr_Mtransform.SetSiblingIndex(iivc_ItemViewers.Count);
                     iivc_ItemViewers.Add(iivc_ItemViewers[i]);
                     iivc_ItemViewers.RemoveAt(i);
+                    break;
                 }
             }
         }

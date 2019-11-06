@@ -63,6 +63,15 @@ namespace BattleRoyale
                 return dic_MappedInventary[str_Group];
             }
         }
+
+        public bool RemoveItem(ItemController ic_Item)
+        {
+            if(dic_MappedInventary.ContainsKey(ic_Item.isc_Stats.str_SlotType))
+            {
+                return dic_MappedInventary[ic_Item.isc_Stats.str_SlotType].RemoveItem(ic_Item);
+            }
+            return false;
+        }
     }
 
     [System.Serializable]

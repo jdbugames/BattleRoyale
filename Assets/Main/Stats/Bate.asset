@@ -9,11 +9,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49f8447cc5ef2d547b35d412064806ac, type: 3}
-  m_Name: Rifle 2
+  m_Name: Bate
   m_EditorClassIdentifier: 
-  str_ItemName: Rifle
+  str_ItemName: Bate
   str_SlotType: PrimaryWeapon
-  spr_Icon: {fileID: 21300030, guid: 5acb27b603af6d44ea6113c4b7b15385, type: 3}
+  spr_Icon: {fileID: 21300000, guid: 94885204eae583e45850153e3ea87dcd, type: 3}
   fl_Weight: 0
   fl_Damage: 0
   bc_BulletPrefab: {fileID: 114122129626729088, guid: 189e10c34578fcc419c568fdfdb56883,

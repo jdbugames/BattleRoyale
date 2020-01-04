@@ -57,10 +57,21 @@ namespace BattleRoyale
                 ShowCrossHair();
             }
 
-            tr_CrossHair.gameObject.SetActive(true);
-            Vector3 vec_End = tr_ShootPoint.position + tr_ShootPoint.forward * GetGunStats().fl_Range;
-            tr_CrossHair.position = Vector3.Lerp(vec_End, tr_Camera.position, 0.9f);
-            tr_CrossHair.rotation = tr_Camera.rotation;
+            //tr_CrossHair.gameObject.SetActive(true);
+            //Vector3 vec_End = tr_ShootPoint.position + tr_ShootPoint.forward * GetGunStats().fl_Range;
+            //tr_CrossHair.position = Vector3.Lerp(vec_End, tr_Camera.position, 0.9f);
+            //tr_CrossHair.rotation = tr_Camera.rotation;
+
+            RaycastHit ray_Hit;
+            if(Physics.Raycast(tr_Camera.position, tr_Camera.forward, out ray_Hit, GetGunStats().fl_Range ))
+            {
+                tr_ShootPoint.LookAt(ray_Hit.point);
+            }
+            else
+            {
+                Vector3 vec_End = tr_Camera.position + tr_Camera.forward * GetGunStats().fl_Range;
+                tr_ShootPoint.LookAt(vec_End);
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49f8447cc5ef2d547b35d412064806ac, type: 3}
-  m_Name: Rifle
+  m_Name: Rifle 2
   m_EditorClassIdentifier: 
   str_ItemName: Rifle
   str_SlotType: PrimaryWeapon
